@@ -12,7 +12,8 @@ def test_retries(execute_mock):
 
     client = Client(
         retries=expected_retries,
-        transport=RequestsHTTPTransport(url='http://swapi.graphene-python.org/graphql')
+        transport=RequestsHTTPTransport(url='http://swapi.graphene-python.org/graphql'),
+        fetch_schema_from_transport=True
     )
 
     query = gql('''
