@@ -39,6 +39,51 @@ query = gql('''
 client.execute(query)
 ```
 
+To execute against a graphQL API. (We get the schema by using introspection).
+
+```
+from gql import gql, Client
+from gql.transport.requests import RequestsHTTPTransport
+
+_transport = RequestsHTTPTransport(
+    url='http://api.xxx/graphql',
+    use_json=True,
+)
+
+client = Client(
+    retries=3,
+    transport=_transport,
+    fetch_schema_from_transport=True,
+)
+query = gql('''
+{
+  hello
+}
+''')
+
+client.execute(query)
+```
+
+If you have a local schema stored as a schema.graphql file, you can do:
+```
+from graphql import build_ast_schema, parse
+from gql import gql, Client
+
+with open('schema.graphql') as source:
+    document = parse(source.read())
+    
+schema = build_ast_schema(document)
+
+client = Client(schema=schema)
+query = gql('''
+{
+  hello
+}
+''')
+
+client.execute(query)
+```
+
 ## License
 
 [MIT License](https://github.com/graphql-python/gql/blob/master/LICENSE)
